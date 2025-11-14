@@ -1,6 +1,6 @@
 from collections import namedtuple
 from functools import partial
-from random import choices, randint, random, randrange
+from random import choices, randint, random, randrange, sample
 import time
 from typing import List
 
@@ -69,6 +69,8 @@ def fitness(genome, things, weight_limit: int, item_limit: int):
 # selection - pair of solutions which will be the parents of two new solutions for the next generation
 def roulette_wheel_selection_pair(population, fitness_func):
   # roulette wheel selection
+  k = 2
+
   weights = [fitness_func(genome) for genome in population]
 
   # if all weight = 0, use uniform selection
@@ -78,12 +80,14 @@ def roulette_wheel_selection_pair(population, fitness_func):
   return choices(
     population=population,
     weights=weights,
-    k=2
+    k=k
   )
 
 
 def ranking_selection_pair(population, fitness_func):
   # ranking selection
+  k = 2
+
   weights = [fitness_func(genome) for genome in population]
 
   # sort population by fitness
@@ -97,8 +101,21 @@ def ranking_selection_pair(population, fitness_func):
   return choices(
     population=sorted_population,
     weights=ranks,
-    k=2
+    k=k
   )
+
+
+def tournament_selection_pair(population, fitness_func):
+  # tournament selection
+  k = 3
+
+  weights = [fitness_func(genome) for genome in population]
+
+  def select_one():
+    tournament = sample(population, min(k, len(population)))
+    return max(tournament, key=fitness_func)
+  
+  return [select_one(), select_one()]
 
 
 # crossover - randomly cut genomes in half and combine
@@ -127,7 +144,7 @@ def run_evolution(
     populate_func,
     fitness_func,
     fitness_limit: int,  # if fitness of the best solution exceeds the limit, it's done
-    selection_func = roulette_wheel_selection_pair,
+    selection_func = tournament_selection_pair,
     crossover_func = single_point_crossover,
     mutation_func = mutation,
     generation_limit = generation_limit
