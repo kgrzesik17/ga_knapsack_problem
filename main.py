@@ -9,7 +9,7 @@ Thing = namedtuple('Thing', ['value', 'weight'])
 # DATA
 generate_population_size = 20
 generation_limit = 100
-mutation_probability = 0.5
+mutation_probability = 0.2
 
 file = open("low-dimensional/f1_l-d_kp_10_269", "r")  # file to analize
 file_optimum = open("low-dimensional-optimum/f1_l-d_kp_10_269", "r")  # file with optimum
@@ -67,7 +67,8 @@ def fitness(genome, things, weight_limit: int, item_limit: int):
 
 
 # selection - pair of solutions which will be the parents of two new solutions for the next generation
-def selection_pair(population, fitness_func):
+def roulette_wheel_selection_pair(population, fitness_func):
+  # roulette wheel selection
   weights = [fitness_func(genome) for genome in population]
 
   # if all weight = 0, use uniform selection
@@ -77,6 +78,25 @@ def selection_pair(population, fitness_func):
   return choices(
     population=population,
     weights=weights,
+    k=2
+  )
+
+
+def ranking_selection_pair(population, fitness_func):
+  # ranking selection
+  weights = [fitness_func(genome) for genome in population]
+
+  # sort population by fitness
+  sorted_population = [genome for _, genome in sorted(zip(weights, population), key=lambda x: x[0])]
+
+  # assign ranks (1 for worst, n for best)
+  n = len(sorted_population)
+  ranks = list(range(1, n + 1))
+
+  # use ranks as weighs for selection
+  return choices(
+    population=sorted_population,
+    weights=ranks,
     k=2
   )
 
@@ -107,7 +127,7 @@ def run_evolution(
     populate_func,
     fitness_func,
     fitness_limit: int,  # if fitness of the best solution exceeds the limit, it's done
-    selection_func = selection_pair,
+    selection_func = roulette_wheel_selection_pair,
     crossover_func = single_point_crossover,
     mutation_func = mutation,
     generation_limit = generation_limit
