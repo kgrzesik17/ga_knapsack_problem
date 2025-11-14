@@ -120,6 +120,7 @@ def tournament_selection_pair(population, fitness_func):
 
 # crossover - randomly cut genomes in half and combine
 def single_point_crossover(a, b):
+  # single point crossover
   if len(a) != len(b):
     raise ValueError("Genomes must be of the same length")
   
@@ -128,7 +129,30 @@ def single_point_crossover(a, b):
     return a, b
   
   p = randint(1, length - 1)
-  return a[0:p] + b[p:], b[0:p] + a[p:]  # first part of a, second part of b, and vice versa
+
+  offspring1 = a[0:p] + b[p:]
+  offspring2 = b[0:p] + a[p:
+                          ]
+  return offspring1, offspring2  # first part of a, second part of b, and vice versa
+
+
+def two_point_crossover(a, b):
+  # two point crossover
+  if len(a) != len(b):
+    raise ValueError("Genomes must be of the same length")
+  
+  length = len(a)
+  if length < 3:
+    p = randint(1, length - 1)
+    return a[0:p] + b[p:], b[0:p] + a[p:]
+  
+  p1 = randint(1, length - 2)
+  p2 = randint(p1 + 1, length - 1)
+
+  offspring1 = a[0:p1] + b[p1:p2] + a[p2:]
+  offspring2 = b[0:p1] + a[p1:p2] + b[p2:]
+
+  return offspring1, offspring2
 
 
 # mutation
