@@ -130,8 +130,7 @@ def single_point_crossover(a, b):
   p = randint(1, length - 1)
 
   offspring1 = a[0:p] + b[p:]
-  offspring2 = b[0:p] + a[p:
-                          ]
+  offspring2 = b[0:p] + a[p:]
   return offspring1, offspring2  # first part of a, second part of b, and vice versa
 
 
@@ -172,8 +171,8 @@ def run_evolution(
     selection_func = roulette_wheel_selection_pair,
     # selection_func = ranking_selection_pair,
     # selection_func = tournament_selection_pair,
-    # crossover_func = single_point_crossover,
-    crossover_func = two_point_crossover,
+    crossover_func = single_point_crossover,
+    # crossover_func = two_point_crossover,
     mutation_func = mutation,
     generation_limit = generation_limit
 ):

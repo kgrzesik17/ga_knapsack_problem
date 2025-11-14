@@ -1,17 +1,6 @@
 from matplotlib import pyplot as plt
 from main import *
 
-mutation_rates = [0.1, 0.2, 0.3]
-crossover_methods = {
-  "Single-point": single_point_crossover,
-  "Two-point": two_point_crossover
-}
-selection_methods = {
-  "Roulette": roulette_wheel_selection_pair,
-  "Ranking": ranking_selection_pair,
-  "Tournament": tournament_selection_pair
-}
-
 def plot_evoluiton(populate_func, fitness_func, fitness_limit, selection_func, crossover_func, mutation_func, generation_limit, title):
   best_per_generation = []
 
