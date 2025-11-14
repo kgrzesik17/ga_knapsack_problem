@@ -7,12 +7,12 @@ from typing import List
 Thing = namedtuple('Thing', ['value', 'weight'])
 
 # DATA
-generate_population_size = 20
+generate_population_size = 200
 generation_limit = 100
 mutation_probability = 0.2
 
-file = open("low-dimensional/f1_l-d_kp_10_269", "r")  # file to analize
-file_optimum = open("low-dimensional-optimum/f1_l-d_kp_10_269", "r")  # file with optimum
+file = open("large_scale/knapPI_1_100_1000_1", "r")  # file to analize
+file_optimum = open("large_scale-optimum/knapPI_1_100_1000_1", "r")  # file with optimum
 
 optimum = 0
 
@@ -46,21 +46,19 @@ def generate_population(size: int, genome_length: int):
 
 
 # fitness function to evaluate solutions
-def fitness(genome, things, weight_limit: int, item_limit: int):
+def fitness(genome, things, weight_limit: int):
   if(len(genome) != len(things)):
     raise ValueError("Genome and things must be of the same length")
   
   weight = 0
   value = 0
-  item_count = 0
 
   for i, thing in enumerate(things):
     if genome[i] == 1:
       weight += thing.weight
       value += thing.value
-      item_count += 1
 
-      if weight > weight_limit or item_count > item_limit:
+      if weight > weight_limit:
         return 0
       
   return value
@@ -168,9 +166,9 @@ def run_evolution(
     populate_func,
     fitness_func,
     fitness_limit: int,  # if fitness of the best solution exceeds the limit, it's done
-    # selection_func = roulette_wheel_selection_pair,
+    selection_func = roulette_wheel_selection_pair,
     # selection_func = ranking_selection_pair,
-    selection_func = tournament_selection_pair,
+    # selection_func = tournament_selection_pair,
     # crossover_func = single_point_crossover,
     crossover_func = two_point_crossover,
     mutation_func = mutation,
@@ -216,7 +214,7 @@ population, generations = run_evolution(
     generate_population, size=generate_population_size, genome_length=len(things)
   ),
   fitness_func=partial(
-    fitness, things=things, weight_limit=knapsack[0].weight, item_limit=knapsack[0].value
+    fitness, things=things, weight_limit=knapsack[0].weight
   ),
   fitness_limit=fitness_limit,
   generation_limit=generation_limit
