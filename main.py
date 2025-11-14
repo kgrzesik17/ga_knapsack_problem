@@ -168,8 +168,11 @@ def run_evolution(
     populate_func,
     fitness_func,
     fitness_limit: int,  # if fitness of the best solution exceeds the limit, it's done
+    # selection_func = roulette_wheel_selection_pair,
+    # selection_func = ranking_selection_pair,
     selection_func = tournament_selection_pair,
-    crossover_func = single_point_crossover,
+    # crossover_func = single_point_crossover,
+    crossover_func = two_point_crossover,
     mutation_func = mutation,
     generation_limit = generation_limit
 ):
