@@ -12,6 +12,4 @@ Aby zmienić dane wejściowe/działanie algorytmu, należy zmienić wartości po
 | file_optimum             | plik z optimum             |
 | file                     | plik do analizy            |
 
-![[Pasted image 20251114113415.png]]
-
 ### 2. Dane wejściowe - przykład

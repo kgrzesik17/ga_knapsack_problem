@@ -1,3 +1,5 @@
+from random import random
+
 # DATA
 generate_population_size = 20
 generation_limit = 100
@@ -25,3 +27,8 @@ for i, line in enumerate(file):
     continue
   
   things.append((int(line[0]), int(line[1])))
+
+
+# genetic representation of the solution
+def generate_genome(length: int):
+  return [1 if random() < 0.1 else 0 for _ in range(length)]
