@@ -1,4 +1,4 @@
-from random import choices, random
+from random import choices, randint, random, randrange
 
 # DATA
 generate_population_size = 20
@@ -68,3 +68,69 @@ def selection_pair(population, fitness_func):
     weights=weights,
     k=2
   )
+
+
+# crossover - randomly cut genomes in half and combine
+def single_point_crossover(a, b):
+  if len(a) != len(b):
+    raise ValueError("Genomes must be of the same length")
+  
+  length = len(a)
+  if length < 2:
+    return a, b
+  
+  p = randint(1, length - 1)
+  return a[0:p] + b[p:], b[0:p] + a[p:]  # first part of a, second part of b, and vice versa
+
+
+# mutation
+def mutation(genome, num: int = 1, probability: float = mutation_probability):
+  for _ in range(num):
+    index = randrange(len(genome))
+    genome[index] = genome[index] if random() < probability else abs(genome[index] - 1)
+  return genome
+
+
+# evolution
+def run_evolution(
+    populate_func,
+    fitness_func,
+    fitness_limit: int,  # if fitness of the best solution exceeds the limit, it's done
+    selection_func = selection_pair,
+    crossover_func = single_point_crossover,
+    mutation_func = mutation,
+    generation_limit = generation_limit
+):
+  # generate the first generation
+  population = populate_func()
+
+  # loop for generation limit times:
+  for i in range(generation_limit):
+    population = sorted(
+      population, 
+      key=lambda genome: fitness_func(genome),
+      reverse=True
+    )
+
+    if fitness_func(population[0]) >= fitness_limit:
+      break
+
+    next_generation = population[0:2]
+
+    # generate all the new solutions for the next generation
+    for j in range(int(len(population) / 2) - 1):
+      parents = selection_func(population, fitness_func)
+      offspring_a, offspring_b = crossover_func(parents[0], parents[1])
+      offspring_a = mutation_func(offspring_a)
+      offspring_b = mutation_func(offspring_b)
+      next_generation += [offspring_a, offspring_b]
+
+    population = next_generation
+
+  population = sorted(
+    population,
+    key=lambda genome: fitness_func(genome),
+    reverse=True
+  )
+
+  return population, i
