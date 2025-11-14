@@ -10,6 +10,7 @@ Thing = namedtuple('Thing', ['value', 'weight'])
 generate_population_size = 200
 generation_limit = 100
 mutation_probability = 0.2
+verbose = False  # should print the output
 
 file = open("large_scale/knapPI_1_100_1000_1", "r")  # file to analize
 file_optimum = open("large_scale-optimum/knapPI_1_100_1000_1", "r")  # file with optimum
@@ -233,11 +234,12 @@ def genome_to_things(genome, thing):
 
   return [result_tuple, result_numer]
 
-print(f"Population size: {generate_population_size}")
-print(f"Mutation probability: {mutation_probability}")
-print(f"Number of generations: {generations + 1}")
-print(f"Time: {end - start}s")
-print(f"Best solution: {genome_to_things(population[0], things)[0]}")
-print(f"Item count: {len(genome_to_things(population[0], things)[0])}")
-print(f"Best solution value sum: {genome_to_things(population[0], things)[1]}")
-print(f"Optimum: {optimum}")
+if verbose:
+  print(f"Population size: {generate_population_size}")
+  print(f"Mutation probability: {mutation_probability}")
+  print(f"Number of generations: {generations + 1}")
+  print(f"Time: {end - start}s")
+  print(f"Best solution: {genome_to_things(population[0], things)[0]}")
+  print(f"Item count: {len(genome_to_things(population[0], things)[0])}")
+  print(f"Best solution value sum: {genome_to_things(population[0], things)[1]}")
+  print(f"Optimum: {optimum}")
