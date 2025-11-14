@@ -1,7 +1,10 @@
+from collections import namedtuple
 from functools import partial
 from random import choices, randint, random, randrange
 import time
 from typing import List
+
+Thing = namedtuple('Thing', ['value', 'weight'])
 
 # DATA
 generate_population_size = 20
@@ -26,10 +29,10 @@ for i, line in enumerate(file):
   line = line.split()
 
   if i == 0:
-    knapsack.append((int(line[0]), int(line[1])))
+    knapsack.append(Thing(int(line[0]), int(line[1])))
     continue
   
-  things.append((int(line[0]), int(line[1])))
+  things.append(Thing(int(line[0]), int(line[1])))
 
 
 # genetic representation of the solution
@@ -157,7 +160,7 @@ population, generations = run_evolution(
 end = time.perf_counter()
 
 # print things based on genome
-def genome_to_things(genome, things):
+def genome_to_things(genome, thing):
   result_numer = 0
   result_tuple = []
 
@@ -167,3 +170,12 @@ def genome_to_things(genome, things):
       result_numer += thing.value
 
   return [result_tuple, result_numer]
+
+print(f"Population size: {generate_population_size}")
+print(f"Mutation probability: {mutation_probability}")
+print(f"Number of generations: {generations + 1}")
+print(f"Time: {end - start}s")
+print(f"Best solution: {genome_to_things(population[0], things)[0]}")
+print(f"Item count: {len(genome_to_things(population[0], things)[0])}")
+print(f"Best solution value sum: {genome_to_things(population[0], things)[1]}")
+print(f"Optimum: {optimum}")
