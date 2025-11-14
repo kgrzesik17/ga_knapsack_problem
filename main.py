@@ -1,3 +1,4 @@
+from functools import partial
 from random import choices, randint, random, randrange
 import time
 from typing import List
@@ -144,10 +145,16 @@ def run_evolution(
 
 start = time.perf_counter()
 population, generations = run_evolution(
-  populate_func = partial(
+  populate_func=partial(
     generate_population, size=generate_population_size, genome_length=len(things)
-  )
+  ),
+  fitness_func=partial(
+    fitness, things=things, weight_limit=knapsack[0].weight, item_limit=knapsack[0].value
+  ),
+  fitness_limit=fitness_limit,
+  generation_limit=generation_limit
 )
+end = time.perf_counter()
 
 # print things based on genome
 def genome_to_things(genome, things):
