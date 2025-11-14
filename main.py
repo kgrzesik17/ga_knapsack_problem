@@ -1,4 +1,4 @@
-from random import random
+from random import choices, random
 
 # DATA
 generate_population_size = 20
@@ -53,3 +53,18 @@ def fitness(genome, things, weight_limit: int, item_limit: int):
         return 0
       
   return value
+
+
+# selection - pair of solutions which will be the parents of two new solutions for the next generation
+def selection_pair(population, fitness_func):
+  weights = [fitness_func(genome) for genome in population]
+
+  # if all weight = 0, use uniform selection
+  if sum(weights) == 0:
+    return choices(population = population, k = 2)
+  
+  return choices(
+    population=population,
+    weights=weights,
+    k=2
+  )
