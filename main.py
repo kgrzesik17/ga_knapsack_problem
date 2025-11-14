@@ -1,4 +1,6 @@
 from random import choices, randint, random, randrange
+import time
+from typing import List
 
 # DATA
 generate_population_size = 20
@@ -32,6 +34,11 @@ for i, line in enumerate(file):
 # genetic representation of the solution
 def generate_genome(length: int):
   return [1 if random() < 0.1 else 0 for _ in range(length)]
+
+
+# generate new solutions
+def generate_population(size: int, genome_length: int):
+  return [generate_genome(genome_length) for _ in range(size)]
 
 
 # fitness function to evaluate solutions
@@ -134,3 +141,22 @@ def run_evolution(
   )
 
   return population, i
+
+start = time.perf_counter()
+population, generations = run_evolution(
+  populate_func = partial(
+    generate_population, size=generate_population_size, genome_length=len(things)
+  )
+)
+
+# print things based on genome
+def genome_to_things(genome, things):
+  result_numer = 0
+  result_tuple = []
+
+  for i, thing in enumerate(things):
+    if genome[i] == 1:
+      result_tuple += [thing.value]
+      result_numer += thing.value
+
+  return [result_tuple, result_numer]
