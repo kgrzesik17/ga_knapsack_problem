@@ -10,7 +10,7 @@ Thing = namedtuple('Thing', ['value', 'weight'])
 generate_population_size = 200
 generation_limit = 100
 mutation_probability = 0.2
-verbose = False  # should print the output
+verbose = True  # should print the output
 
 file = open("large_scale/knapPI_1_100_1000_1", "r")  # file to analize
 file_optimum = open("large_scale-optimum/knapPI_1_100_1000_1", "r")  # file with optimum
@@ -156,10 +156,12 @@ def two_point_crossover(a, b):
 
 # mutation
 def mutation(genome, num: int = 1, probability: float = mutation_probability):
-  for _ in range(num):
-    index = randrange(len(genome))
-    genome[index] = genome[index] if random() < probability else abs(genome[index] - 1)
-  return genome
+    for _ in range(num):
+        index = randrange(len(genome))
+        if random() < probability:  # flip with probability
+            genome[index] = 1 - genome[index]
+    return genome
+
 
 
 # evolution

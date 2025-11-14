@@ -54,5 +54,5 @@ population, best_values = plot_evoluiton(
   crossover_func=single_point_crossover,
   mutation_func=mutation,
   generation_limit=generation_limit,
-  title="Evolution: test"
+  title="Evolution chart"
 )
